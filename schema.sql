@@ -1,0 +1,61 @@
+CREATE TABLE IF NOT EXISTS Branch (
+  Id INTEGER PRIMARY KEY AUTOINCREMENT,
+  Name TEXT NOT NULL,
+  Address TEXT,
+  Phone TEXT,
+  Manager TEXT
+);
+CREATE TABLE IF NOT EXISTS Product (
+  Id INTEGER PRIMARY KEY AUTOINCREMENT,
+  Barcode TEXT UNIQUE,
+  Name TEXT NOT NULL,
+  Category TEXT,
+  UnitPrice REAL DEFAULT 0,
+  ReorderLevel INTEGER DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS BranchStock (
+  Id INTEGER PRIMARY KEY AUTOINCREMENT,
+  BranchId INTEGER NOT NULL,
+  ProductId INTEGER NOT NULL,
+  Quantity INTEGER DEFAULT 0
+);
+CREATE TABLE IF NOT EXISTS Supplier (
+  Id INTEGER PRIMARY KEY AUTOINCREMENT,
+  Name TEXT NOT NULL,
+  Contact TEXT,
+  Email TEXT,
+  Phone TEXT,
+  Notes TEXT
+);
+CREATE TABLE IF NOT EXISTS PurchaseOrder (
+  Id INTEGER PRIMARY KEY AUTOINCREMENT,
+  SupplierId INTEGER,
+  OrderDate TEXT,
+  ExpectedDate TEXT,
+  Status TEXT,
+  Total REAL
+);
+CREATE TABLE IF NOT EXISTS PurchaseOrderItem (
+  Id INTEGER PRIMARY KEY AUTOINCREMENT,
+  PurchaseOrderId INTEGER,
+  ProductId INTEGER,
+  Quantity INTEGER,
+  UnitPrice REAL
+);
+CREATE TABLE IF NOT EXISTS Transfer (
+  Id INTEGER PRIMARY KEY AUTOINCREMENT,
+  FromBranchId INTEGER,
+  ToBranchId INTEGER,
+  ProductId INTEGER,
+  Quantity INTEGER,
+  TransferDate TEXT,
+  Reason TEXT
+);
+CREATE TABLE IF NOT EXISTS Users (
+  Id INTEGER PRIMARY KEY AUTOINCREMENT,
+  Username TEXT UNIQUE,
+  Password TEXT,
+  Role TEXT
+);
+-- Seed a default admin (username: admin, password: admin)
+INSERT INTO Users (Username, Password, Role) SELECT 'admin','admin','Admin' WHERE NOT EXISTS(SELECT 1 FROM Users WHERE Username='admin');
